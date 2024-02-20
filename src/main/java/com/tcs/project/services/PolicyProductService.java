@@ -35,25 +35,21 @@ public class PolicyProductService {
     }
     public PolicyProduct updatePolicyProduct(PolicyProduct policyproduct) {
     	
-    	Optional<PolicyProduct> optional= policyproductrepository.findById(policyproduct.getPolicyId());
+    	Optional<PolicyProduct> optional= policyproductrepository.findById(policyproduct.getProductId());
     	PolicyProduct tempPolicy= optional.get();
-    	tempPolicy.setType(policyproduct.getType());
+    	tempPolicy.setCoverageDescription(policyproduct.getCoverageDescription());
     	tempPolicy.setCoverageAmount(policyproduct.getCoverageAmount());
-    	tempPolicy.setPremium(policyproduct.getPremium());
+    	tempPolicy.setProductCode(policyproduct.getProductCode());
     	tempPolicy.setTenure(policyproduct.getTenure());
-    	
+    	tempPolicy.setProductName(policyproduct.getProductName());
+    	tempPolicy.setProductPremium(policyproduct.getProductPremium());
+    	tempPolicy.setProductTier(policyproduct.getProductTier());
     	
     	return (PolicyProduct) policyproductrepository.save(tempPolicy);
     }
 	
     public boolean deletePolicyProduct(Integer policyId) {
-		
     	policyproductrepository.deleteById(policyId);
     	return true;
 	}
-    
-	
-	
-	
-
 }

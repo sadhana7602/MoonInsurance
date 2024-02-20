@@ -27,7 +27,7 @@ public class CustomerResource {
 	
 	
 	@GetMapping("/customerbyid/{id}")
-	public Customer getClientByIdHandler(@PathVariable("Customerid") int id)  {
+	public Customer getClientByIdHandler(@PathVariable("id") int id)  {
 		return customerservice.getCustomerById(id);
 	}
 	
@@ -49,7 +49,7 @@ public class CustomerResource {
 	}
 	
 	@DeleteMapping("/deletecustomer/{id}")
-	public boolean deleteCustomerHandler(@PathVariable("Customerid") int id){
+	public boolean deleteCustomerHandler(@PathVariable("id") int id){
 		return customerservice.deleteCustomer(id);
 	}
 	

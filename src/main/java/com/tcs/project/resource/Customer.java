@@ -15,9 +15,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-
-@Setter
-@Getter
 @NoArgsConstructor
 @Data
 @AllArgsConstructor
@@ -28,36 +25,15 @@ public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer Customerid;
-    
-    
-
     private String Name;
-    
-    
-
     private LocalDate dateOfBirth;
-    
-    
-    
     private String email;
-    
-    
-	
     private String phoneNumber;
-    
-   
     private String password;
-    
-    
     private String address;
     
-    //private List<PolicyList> policies = new ArrayList<>();
-    
+    //private List<PolicyList> policies = new ArrayList<>();    
     //private List<Claims> claims = new ArrayList<>();
-    
-    
-
-
 
 }
 

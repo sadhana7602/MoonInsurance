@@ -1,7 +1,5 @@
 package com.tcs.project.resource;
 
-import java.time.LocalDate;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -9,13 +7,9 @@ import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
 
-@Setter
-@Getter
 @NoArgsConstructor
 @Data
 @AllArgsConstructor
@@ -24,17 +18,19 @@ import lombok.ToString;
 public class PolicyProduct {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer policyId;
+	protected Integer productId;
 	@NotNull
-	private String type;
+	protected String productCode;
 	@NotNull
-	private Double coverageAmount;
+	protected String productName;
 	@NotNull
-	private Double premium;
+	protected String productTier;
 	@NotNull
-	private int tenure;
-	
-	
-	
-	
+	protected Double coverageAmount;
+	@NotNull
+	protected String coverageDescription;
+	@NotNull
+	protected Double productPremium;
+	@NotNull
+	protected int tenure;
 }

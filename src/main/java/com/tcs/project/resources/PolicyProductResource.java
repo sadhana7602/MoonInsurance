@@ -1,6 +1,5 @@
 package com.tcs.project.resources;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,18 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.tcs.project.resource.Customer;
 import com.tcs.project.resource.PolicyProduct;
 import com.tcs.project.services.PolicyProductService;
-
-import jakarta.persistence.Entity;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-
 
 @RestController
 @RequestMapping("/policyproduct")
