@@ -3,7 +3,6 @@ package com.tcs.project.services;
 import java.util.ArrayList;
 import java.util.Optional;
 
-import org.hibernate.mapping.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -73,7 +72,7 @@ public class PurchasedPolicyService {
 				.findAll();
 
 		for (PurchasedPolicies policy : purchasedpolicies) {
-			Object[] details = new Object[7];
+			Object[] details = new Object[8];
 			details[0] = policy.getPolicyNo();
 			details[5] = policy.getEffectiveDate();
 			details[6] = policy.getExpiryDate();
@@ -88,6 +87,10 @@ public class PurchasedPolicyService {
 			details[4] = product.getCoverageAmount();
 
 			policyDetails.add(details);
+		}
+		
+		for (PurchasedPolicies policy : purchasedpolicies) {
+			System.out.println(policy);
 		}
 		return policyDetails;
 	}

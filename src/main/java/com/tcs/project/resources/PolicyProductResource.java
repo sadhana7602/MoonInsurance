@@ -25,43 +25,37 @@ public class PolicyProductResource {
 	@Autowired
 	private PolicyProductService policyproductservice;
 	
-	@GetMapping("/policieproducts")
-	public ResponseEntity<ArrayList<PolicyProduct>> allPolicyProductHandler(@PathVariable("policyId") Integer policyId){
-		return new ResponseEntity<ArrayList<PolicyProduct>> (policyproductservice.allPolicyProductById(policyId),
+	@GetMapping("/all")
+	public ResponseEntity<ArrayList<PolicyProduct>> allPolicyProduct(){
+		return new ResponseEntity<ArrayList<PolicyProduct>> (policyproductservice.allPolicyProductById(),
 				HttpStatus.OK);
-		
 	}
 	
-	
-	@GetMapping("/policyproductbyid/{pn}")
-	public ResponseEntity<PolicyProduct> getPolicyProductHandler(@PathVariable("pn") Integer policyId){
-		return new ResponseEntity<PolicyProduct> (policyproductservice.getPolicyProductById(policyId),
-				HttpStatus.OK);
-		
+	@GetMapping("/get/{id}")
+	public ResponseEntity<PolicyProduct> getPolicyProduct(@PathVariable("id") Integer id){
+		return new ResponseEntity<PolicyProduct> (policyproductservice.getPolicyProductById(id),
+				HttpStatus.OK);	
 	}
 	
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE,
-			value = "/addpolicyproduct")
-	public ResponseEntity<PolicyProduct> createPolicyProductHandler(@RequestBody PolicyProduct policyproduct){
+			value = "/add")
+	public ResponseEntity<PolicyProduct> createPolicyProduct(@RequestBody PolicyProduct policyproduct){
 		return new ResponseEntity<PolicyProduct> (policyproductservice.createPolicyProduct(policyproduct),
 				HttpStatus.CREATED);
-		
 	}
 	
 	@PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE,
-			value = "/updatepolicyproduct")
-	public ResponseEntity<PolicyProduct> updatePolicyProductHandler(@RequestBody PolicyProduct policyproduct){
+			value = "/update")
+	public ResponseEntity<PolicyProduct> updatePolicyProduct(@RequestBody PolicyProduct policyproduct){
 		return new ResponseEntity<PolicyProduct> (policyproductservice.updatePolicyProduct(policyproduct),
 				HttpStatus.OK);
-		
 	}
 	
-	@DeleteMapping("/deletepolicyproduct/{pn}")
-	public boolean deletePolicyProductHandler(@PathVariable("pn") Integer policyId){
-		return policyproductservice.deletePolicyProduct(policyId);
-		
+	@DeleteMapping("/delete/{id}")
+	public boolean deletePolicyProduct(@PathVariable("id") Integer id){
+		return policyproductservice.deletePolicyProduct(id);
 	}
 	
 }

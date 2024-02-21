@@ -11,20 +11,21 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-@NoArgsConstructor
+@Entity
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@Entity
-public class Claims {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	protected int recordId;
-	protected String policyNo;
-	protected String claimNo;
-	protected Date claimEntryDate;
-	protected String causeOfLoss;
-	protected Double claimAmount;
-	
+public class VehicleInsurance {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int recordId;
+    private int customerId;
+    private int productId;
+    private String policyNo;
+    private Date purchaseDate;
+    private String model;
+    private String make;
+    private Date fcDate;
+
 }

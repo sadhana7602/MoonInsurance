@@ -1,9 +1,7 @@
 package com.tcs.project.resources;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,31 +23,32 @@ public class CustomerResource {
 	@Autowired
 	CustomerService customerservice;
 	
-	
-	@GetMapping("/customerbyid/{id}")
-	public Customer getClientByIdHandler(@PathVariable("id") int id)  {
+	@GetMapping("/all")
+	public Customer getAllCustomer(@PathVariable("id") int id)  {
 		return customerservice.getCustomerById(id);
 	}
 	
+	@GetMapping("/get/{id}")
+	public Customer getCustomerById(@PathVariable("id") int id)  {
+		return customerservice.getCustomerById(id);
+	}
 	
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
 	produces = MediaType.APPLICATION_JSON_VALUE,
-	value = "/addcustomer")
-	public Customer RegisterCustomerHandler(@RequestBody Customer customer)  {
-		System.out.println("hi");
+	value = "/add")
+	public Customer AddCustomer(@RequestBody Customer customer)  {
 		return customerservice.registerCustomer(customer);
 	}
 	
 	@PutMapping(consumes =MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE,
-			value = "/updatecustomer")
-	public Customer UpdateCustomerHandler( @RequestBody Customer customer)  {
-		
+			value = "/update")
+	public Customer updateCustomer( @RequestBody Customer customer)  {
 		return customerservice.updateCustomer(customer);
 	}
 	
-	@DeleteMapping("/deletecustomer/{id}")
-	public boolean deleteCustomerHandler(@PathVariable("id") int id){
+	@DeleteMapping("/delete/{id}")
+	public boolean deleteCustomer(@PathVariable("id") int id){
 		return customerservice.deleteCustomer(id);
 	}
 	

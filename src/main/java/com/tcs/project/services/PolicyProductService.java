@@ -17,7 +17,7 @@ public class PolicyProductService {
 	PolicyProductRepository policyproductrepository;
 
 	
-	public ArrayList<PolicyProduct> allPolicyProductById(Integer policyId) {
+	public ArrayList<PolicyProduct> allPolicyProductById() {
 		
 		ArrayList<PolicyProduct> policies = (ArrayList<PolicyProduct>) policyproductrepository.findAll();
 		return   policies;
