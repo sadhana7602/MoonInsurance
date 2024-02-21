@@ -3,15 +3,23 @@ package com.tcs.project.services;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+//import org.springframework.mail.javamail.JavaMailSender;
+
 import org.springframework.stereotype.Service;
 
 import com.tcs.project.repository.CustomerRepository;
 import com.tcs.project.resource.Customer;
 
+
+
 @Service
 public class CustomerService {
 	@Autowired
 	CustomerRepository customerrepository;
+	@Autowired
+    private JavaMailSender mailSender;
 	
 	public Customer getCustomerById(int id) {
 		
@@ -20,8 +28,18 @@ public class CustomerService {
 	}
 	
 	public Customer registerCustomer(Customer customer) {
+		SimpleMailMessage message = new SimpleMailMessage();
+        
+		message.setFrom("javafsdgroup@gmail.com");
+        message.setTo(customer.getEmail());
+        message.setSubject("Registration Confirmation");
+        message.setText("Dear Customer,\\n\\nThank you for registering with us.\\n\\nBest regards,\\nMoon Insurance");
+        
+        mailSender.send(message);
+    
 	
 		return customerrepository.save(customer);
+		
 		
 	}
 	

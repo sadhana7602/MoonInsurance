@@ -3,6 +3,8 @@ package com.tcs.project.resource;
 import java.util.Date;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,7 +19,8 @@ import lombok.ToString;
 public class PurchasedPolicies {	
 	
 	@Id
-	protected String policyNo;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	protected int policyNo;
 	protected int customerId;
 	protected int productId;
 	protected Date effectiveDate;

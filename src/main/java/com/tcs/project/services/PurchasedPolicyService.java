@@ -18,7 +18,7 @@ import com.tcs.project.resource.PurchasedPolicies;
 public class PurchasedPolicyService {
 
 	@Autowired
-	private PurchasedPolicyRepository purchasedpolicyrepository;
+	 PurchasedPolicyRepository purchasedpolicyrepository;
 	@Autowired
 	PolicyProductRepository policyproductrepository;
 	@Autowired

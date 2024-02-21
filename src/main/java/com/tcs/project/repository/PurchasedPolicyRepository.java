@@ -5,7 +5,9 @@ import org.springframework.stereotype.Repository;
 
 import com.tcs.project.resource.PurchasedPolicies;
 
-@Repository
-public interface PurchasedPolicyRepository extends JpaRepository<PurchasedPolicies, Integer> {
 
+
+@Repository
+public interface PurchasedPolicyRepository extends JpaRepository<PurchasedPolicies,Integer>{
+	
 }
