@@ -16,8 +16,8 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class VehicleInsurance {
-    @Id
+public class HomeInsurance {
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int policyId;
     private int productId;
@@ -30,8 +30,7 @@ public class VehicleInsurance {
     private String nominee;
     private Double coverageBalance;
     private int renewal;
-    private String model;
-    private String make;
-    private Date fcDate;
-
+    private String homeType;
+    private Double builtArea;
+    private Double assetValue;
 }

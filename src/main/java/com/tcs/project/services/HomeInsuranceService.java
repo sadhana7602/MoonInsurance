@@ -1,5 +1,8 @@
 package com.tcs.project.services;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
@@ -7,21 +10,16 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import com.tcs.project.repository.CustomerRepository;
-import com.tcs.project.repository.HealthInsuranceRepository;
+import com.tcs.project.repository.HomeInsuranceRepository;
 import com.tcs.project.repository.PolicyProductRepository;
 import com.tcs.project.resource.Customer;
-import com.tcs.project.resource.HealthInsurance;
+import com.tcs.project.resource.HomeInsurance;
 import com.tcs.project.resource.PolicyProduct;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
- 
 @Service
-public class HealthInsuranceService {
- 
-    @Autowired
-    private HealthInsuranceRepository healthInsuranceRepository;
+public class HomeInsuranceService {
+	@Autowired
+    private HomeInsuranceRepository homeInsuranceRepository;
     @Autowired
 	PolicyProductRepository policyproductrepository;
 	@Autowired
@@ -29,22 +27,22 @@ public class HealthInsuranceService {
 	@Autowired
     private JavaMailSender mailSender;
     
-    public List<HealthInsurance> getAllHealthInsurances() {
-        return healthInsuranceRepository.findAll();
+    public List<HomeInsurance> getAllHomeInsurances() {
+        return homeInsuranceRepository.findAll();
     }
-    public Optional<HealthInsurance> getHealthInsuranceById(int id) {
-        return healthInsuranceRepository.findById(id);
+    public Optional<HomeInsurance> getHomeInsuranceById(int id) {
+        return homeInsuranceRepository.findById(id);
     }
-    public HealthInsurance createHealthInsurance(HealthInsurance healthInsurance) {
-        //return healthInsuranceRepository.save(healthInsurance);
+    public HomeInsurance createHomeInsurance(HomeInsurance homeInsurance) {
+        //return homeInsuranceRepository.save(homeInsurance);
     	
     	SimpleMailMessage message = new SimpleMailMessage();
-    	HealthInsurance purchasedPolicy=(HealthInsurance) healthInsuranceRepository.save(healthInsurance);
-        Customer customer=customerrepository.getById(healthInsurance.getCustomerId());
-        PolicyProduct policy=policyproductrepository.getById(healthInsurance.getProductId());
+    	HomeInsurance purchasedPolicy=(HomeInsurance) homeInsuranceRepository.save(homeInsurance);
+        Customer customer=customerrepository.getById(homeInsurance.getCustomerId());
+        PolicyProduct policy=policyproductrepository.getById(homeInsurance.getProductId());
 		message.setFrom("javafsdgroup@gmail.com");
         message.setTo(customer.getEmail());
-        message.setSubject("Health Insurance Policy Purchase Confirmation");
+        message.setSubject("Home Insurance Policy Purchase Confirmation");
         message.setText("Dear "+customer.getName()+",\n\nThank you for purchasing a policy. Below are the details:\n\nPolicyNo: "+purchasedPolicy.getPolicyNo()
         		+"\nPolicy Name :"+policy.getProductName()
         		+"\nPremium:"+policy.getProductPremium()
@@ -59,28 +57,28 @@ public class HealthInsuranceService {
     
 		return purchasedPolicy;
     }
-    public HealthInsurance updateHealthInsurance(HealthInsurance updatedHealthInsurance) {
+    public HomeInsurance updateHomeInsurance(HomeInsurance updatedHomeInsurance) {
     	
-    	Optional<HealthInsurance> optional = healthInsuranceRepository.findById(updatedHealthInsurance.getPolicyId());
-    	HealthInsurance tempHealthInsurance = optional.get();
-    	tempHealthInsurance.setGender(updatedHealthInsurance.getGender());
-    	tempHealthInsurance.setAge(updatedHealthInsurance.getAge());
-    	tempHealthInsurance.setNominee(updatedHealthInsurance.getNominee());
+    	Optional<HomeInsurance> optional = homeInsuranceRepository.findById(updatedHomeInsurance.getPolicyId());
+    	HomeInsurance tempHomeInsurance = optional.get();
+    	tempHomeInsurance.setGender(updatedHomeInsurance.getGender());
+    	tempHomeInsurance.setAge(updatedHomeInsurance.getAge());
+    	tempHomeInsurance.setNominee(updatedHomeInsurance.getNominee());
 
-		return (HealthInsurance) healthInsuranceRepository.save(tempHealthInsurance);
+		return (HomeInsurance) homeInsuranceRepository.save(tempHomeInsurance);
     }
  
-    public boolean deleteHealthInsurance(int id) {
-        healthInsuranceRepository.deleteById(id);
+    public boolean deleteHomeInsurance(int id) {
+        homeInsuranceRepository.deleteById(id);
         return true;
     }
 
 	public ArrayList<Object[]> allAdminPurchasedPolicies() {
 
 		ArrayList<Object[]> policyDetails = new ArrayList<>();
-		ArrayList<HealthInsurance> purchasedpolicies = (ArrayList<HealthInsurance>) healthInsuranceRepository.findAll();
+		ArrayList<HomeInsurance> purchasedpolicies = (ArrayList<HomeInsurance>) homeInsuranceRepository.findAll();
 
-		for (HealthInsurance policy : purchasedpolicies) {
+		for (HomeInsurance policy : purchasedpolicies) {
 			Object[] details = new Object[8];
 			details[0] = policy.getPolicyNo();
 			details[5] = policy.getEffectiveDate();
@@ -98,11 +96,9 @@ public class HealthInsuranceService {
 			policyDetails.add(details);
 		}
 		
-		for (HealthInsurance policy : purchasedpolicies) {
+		for (HomeInsurance policy : purchasedpolicies) {
 			System.out.println(policy);
 		}
 		return policyDetails;
 	}
 }
-
-
