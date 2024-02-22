@@ -1,5 +1,6 @@
 package com.tcs.project.resources;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,5 +54,10 @@ public class HealthInsuranceResource {
     public boolean deleteHealthInsurance(@PathVariable int id) {
         return healthInsuranceService.deleteHealthInsurance(id);
     }
+    
+    @GetMapping("/adminall")
+	public ResponseEntity<ArrayList<Object[]>> allAdminPurchasedPolicies(){
+		return new ResponseEntity<ArrayList<Object[]>> (healthInsuranceService.allAdminPurchasedPolicies() ,HttpStatus.OK);
+	}
 
 }

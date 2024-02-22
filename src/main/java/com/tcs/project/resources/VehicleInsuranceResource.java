@@ -1,5 +1,6 @@
 package com.tcs.project.resources;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,10 +47,15 @@ public class VehicleInsuranceResource {
         VehicleInsurance updatedInsurance = vehicleInsuranceService.updateVehicleInsurance(updatedVehicleInsurance);
         return ResponseEntity.ok(updatedInsurance);
     }
- 
+    
     @DeleteMapping("/delete/{id}")
     public boolean deleteVehicleInsurance(@PathVariable int id) {
         return vehicleInsuranceService.deleteVehicleInsurance(id);
     }
+    
+    @GetMapping("/adminall")
+	public ResponseEntity<ArrayList<Object[]>> allAdminPurchasedPolicies(){
+		return new ResponseEntity<ArrayList<Object[]>> (vehicleInsuranceService.allAdminPurchasedPolicies() ,HttpStatus.OK);
+	}
     
 }

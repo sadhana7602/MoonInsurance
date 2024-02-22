@@ -56,7 +56,7 @@ public class PurchasedPolicyService {
                 +"\nNominee:"+purchasedPolicy.getNominee()
                 
      
-        		+"\\n\\n\\n\n\nBest regards,\nMoon Insurance");
+        		+"\n\n\n\n\nBest regards,\nMoon Insurance");
         
         mailSender.send(message);
     
