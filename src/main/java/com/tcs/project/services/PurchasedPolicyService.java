@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import com.tcs.project.repository.CustomerRepository;
@@ -22,6 +24,8 @@ public class PurchasedPolicyService {
 	PolicyProductRepository policyproductrepository;
 	@Autowired
 	CustomerRepository customerrepository;
+	@Autowired
+    private JavaMailSender mailSender;
 
 	public ArrayList<PurchasedPolicies> allPurchasedPolicies() {
 
@@ -37,6 +41,24 @@ public class PurchasedPolicyService {
 	}
 
 	public PurchasedPolicies createPurchasedPolicy(PurchasedPolicies purchasedPolicy) {
+		SimpleMailMessage message = new SimpleMailMessage();
+        Customer customer=customerrepository.getById(purchasedPolicy.getCustomerId());
+        PolicyProduct policy=policyproductrepository.getById(purchasedPolicy.getProductId());
+		message.setFrom("javafsdgroup@gmail.com");
+        message.setTo(customer.getEmail());
+        message.setSubject("Policy Purchase Confirmation");
+        message.setText("Dear "+customer.getName()+",\n\nThank you for purchasing a policy. Below are the details:\n\nPolicyNo: "+purchasedPolicy.getPolicyNo()
+        		+"\nPolicy Name :"+policy.getProductName()
+        		+"\nPremium:"+policy.getProductPremium()
+        		+"\nEffective Date :"+purchasedPolicy.getEffectiveDate()
+                +"\nExpire Date :"+purchasedPolicy.getExpiryDate()
+                +"\nNominee:"+purchasedPolicy.getNominee()
+                
+     
+        		+"\\n\\n\\n\n\nBest regards,\nMoon Insurance");
+        
+        mailSender.send(message);
+    
 		return (PurchasedPolicies) purchasedpolicyrepository.save(purchasedPolicy);
 
 	}
@@ -95,29 +117,5 @@ public class PurchasedPolicyService {
 		return policyDetails;
 	}
 
-//	public ArrayList<Object[]> allCustomerAdminPurchasedPolicies(Customer customer) {
-//
-//		ArrayList<Object[]> policyDetails = new ArrayList<>();
-//		ArrayList<PurchasedPolicies> purchasedpolicies = (ArrayList<PurchasedPolicies>) purchasedpolicyrepository
-//				.findByCustomerId(customer.getCustomerid());
-//
-//		for (PurchasedPolicies policy : purchasedpolicies) {
-//			Object[] details = new Object[7];
-//			details[0] = policy.getPolicyNo();
-//			details[5] = policy.getEffectiveDate();
-//			details[6] = policy.getExpiryDate();
-//			details[7] = policy.getNominee();
-//
-//			Customer customer = customerrepository.findById(policy.getCustomerId()).orElse(null);
-//			details[1] = customer.getCustomerid();
-//			details[2] = customer.getName();
-//
-//			PolicyProduct product = policyproductrepository.findById(policy.getProductId()).orElse(null);
-//			details[3] = product.getProductTier();
-//			details[4] = product.getCoverageAmount();
-//
-//			policyDetails.add(details);
-//		}
-//		return policyDetails;
-//	}
+
 }

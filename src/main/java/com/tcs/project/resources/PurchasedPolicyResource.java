@@ -60,8 +60,5 @@ public class PurchasedPolicyResource {
 	public ResponseEntity<ArrayList<Object[]>> allAdminPurchasedPolicies(){
 		return new ResponseEntity<ArrayList<Object[]>> (purchasedpolicyservice.allAdminPurchasedPolicies() ,HttpStatus.OK);
 	}
-//	@GetMapping("/customerall")
-//	public ResponseEntity<ArrayList<Object[]>> allCustomerPurchasedPolicies(@RequestBody Customer customer){
-//		return new ResponseEntity<ArrayList<Object[]>> (purchasedpolicyservice.allCustomerPurchasedPolicies(customer) ,HttpStatus.OK);
-//	}
+
 }
