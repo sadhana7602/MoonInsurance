@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,17 +17,14 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 @Entity
-public class Claims {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	protected int recordId;
-	protected String policyNo;
-	protected int  productId;
-	protected int CustomerId;
-	protected String claimNo;
-	protected Date claimEntryDate;
-	protected String causeOfLoss;
-	protected Double claimAmount;
-	
+public class Query {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int queryId;
+    private int customerId;
+    private int policyNo;
+    private String question;
+    private String answer = ""; // Default empty string for answer
+
+    // Getters and setters
 }
