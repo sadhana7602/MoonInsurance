@@ -1,6 +1,7 @@
 package com.tcs.project.services;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,29 +31,38 @@ public class CustomerService {
 	@Autowired
 	PurchasedPolicyRepository purchasedpolicyrepository;
 	
+	public List<Customer> getAllCustomer() {
+		
+		return customerrepository.findAll();
+	}
+	
 	public Customer getCustomerById(int id) {
 		
 		Optional<Customer> customer = customerrepository.findById(id);
 		return customer.get();
 	}
 	
-	public Customer registerCustomer(Customer customer) {
+	public Customer registerCustomer(Customer customerD) {
+		
+    
+	
+		Customer customer = customerrepository.save(customerD);
 		SimpleMailMessage message = new SimpleMailMessage();
         
 		message.setFrom("javafsdgroup@gmail.com");
         message.setTo(customer.getEmail());
         message.setSubject("Registration Confirmation");
         message.setText("Dear "+customer.getName()+",\n\n\nThank you for registering with us.Below are the details:\n\n"+
-        "CustomerId : "+customer.getCustomerid()+
-        "Customer Name : "+customer.getName()+
-        "Customer Phone number: "+customer.getPhoneNumber()+
-        "Customer Address: "+customer.getAddress()
+        "\nCustomerId : "+customer.getCustomerid()+
+        "\nCustomer Name : "+customer.getName()+
+        "\nCustomer Phone number: "+customer.getPhoneNumber()+
+        "\nCustomer Address: "+customer.getAddress()
         +"\n\n\nBest regards,\nMoon Insurance");
         
+        System.out.println(customer);
+        
         mailSender.send(message);
-    
-	
-		return customerrepository.save(customer);
+        return customer;
 		
 		
 	}

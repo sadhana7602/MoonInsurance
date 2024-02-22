@@ -40,8 +40,9 @@ public class PurchasedPolicyService {
 		return purchasedPolicies.get();
 	}
 
-	public PurchasedPolicies createPurchasedPolicy(PurchasedPolicies purchasedPolicy) {
+	public PurchasedPolicies createPurchasedPolicy(PurchasedPolicies purchasedPolicyD) {
 		SimpleMailMessage message = new SimpleMailMessage();
+		PurchasedPolicies purchasedPolicy=(PurchasedPolicies) purchasedpolicyrepository.save(purchasedPolicyD);
         Customer customer=customerrepository.getById(purchasedPolicy.getCustomerId());
         PolicyProduct policy=policyproductrepository.getById(purchasedPolicy.getProductId());
 		message.setFrom("javafsdgroup@gmail.com");
@@ -59,7 +60,7 @@ public class PurchasedPolicyService {
         
         mailSender.send(message);
     
-		return (PurchasedPolicies) purchasedpolicyrepository.save(purchasedPolicy);
+		return purchasedPolicy;
 
 	}
 

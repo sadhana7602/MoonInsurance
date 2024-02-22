@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.tcs.project.resource.Customer;
 import com.tcs.project.services.CustomerService;
@@ -27,8 +28,8 @@ public class CustomerResource {
 	CustomerService customerservice;
 	
 	@GetMapping("/all")
-	public Customer getAllCustomer(@PathVariable("id") int id)  {
-		return customerservice.getCustomerById(id);
+	public List<Customer> getAllCustomer()  {
+		return customerservice.getAllCustomer();
 	}
 	
 	@GetMapping("/get/{id}")

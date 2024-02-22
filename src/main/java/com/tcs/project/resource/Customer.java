@@ -21,7 +21,7 @@ public class Customer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer Customerid;
+    private int Customerid;
     private String Name;
     private LocalDate dateOfBirth;
     private String email;
