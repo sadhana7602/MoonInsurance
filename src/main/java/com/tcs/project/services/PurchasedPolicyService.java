@@ -112,9 +112,7 @@ public class PurchasedPolicyService {
 			policyDetails.add(details);
 		}
 		
-		for (PurchasedPolicies policy : purchasedpolicies) {
-			System.out.println(policy);
-		}
+		
 		return policyDetails;
 	}
 
