@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.tcs.project.repository.CustomerRepository;
 import com.tcs.project.repository.QueryRepository;
+import com.tcs.project.resource.Claims;
 import com.tcs.project.resource.Customer;
 import com.tcs.project.resource.Query;
 import org.springframework.mail.SimpleMailMessage;
@@ -36,8 +37,11 @@ public class QueryService {
         return queryRepository.findById(id);
     }
 
-    public Query updateQuery(int id, Query updatedQuery) {
-        updatedQuery.setQueryId(id);
+    public Query updateQuery(Query updatedQuery) {
+        //updatedQuery.setQueryId(id);
+    	Optional<Query> optional= queryRepository.findById(updatedQuery.getQueryId());
+    	Query tempQuery= optional.get();
+    	tempQuery.setQuestion(updatedQuery.getQuestion());
         return queryRepository.save(updatedQuery);
     }
 

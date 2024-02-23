@@ -3,6 +3,7 @@ package com.tcs.project.services;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,8 +53,9 @@ public class ClaimsService {
     }
     
     public Claims updateClaim(Claims claim) {
-    	Optional<Claims> optional= claimsrepository.findById(claim.getRecordId());
+    	Optional<Claims> optional= claimsrepository.findById(claim.getClaimId());
     	Claims tempClaim= optional.get();
+    	tempClaim.setPolicyId(claim.getPolicyId());
     	tempClaim.setClaimNo(claim.getClaimNo());
     	tempClaim.setCustomerId(claim.getCustomerId());
     	tempClaim.setProductId(claim.getProductId());
@@ -71,18 +73,33 @@ public class ClaimsService {
     public boolean adminvalidation(String pno){
     	String pid = pno.substring(7); // Extracting last 3 digits
         int policyId = Integer.parseInt(pid); // Converting to integer to remove leading zeros
+        System.out.println(policyId);
+        //Claims claim= claimsrepository.getById(recordId);
         
-        Claims claim= claimsrepository.getById(policyId);
+        List<Claims> claimsList = claimsrepository.findAll();
+        System.out.println(claimsList);
+        Claims claimRecord = null;
         
-        PolicyProduct product= policyproductrepository.getById(claim.getProductId());
+        for(Claims claim : claimsList) {
+        	if(claim.getPolicyId() == policyId) {
+        		claimRecord = claimsrepository.getById(claim.getClaimId());
+        	}
+        }
+        System.out.println(claimRecord);
+        PolicyProduct product= policyproductrepository.getById(claimRecord.getProductId());
+        System.out.println(product);
         
-        if(product.getProductName()=="Health") {
+        if(product.getProductCode().equals("Health")) {
         	HealthInsurance hi = healthinsurancerepository.getById(policyId);
         	
         	if(hi.getAge()>18 && hi.getAge()<60) {
-        		if(product.getCoverageDescription().contains(claim.getCauseOfLoss())) {
-        			if(claim.getClaimAmount()<= hi.getCoverageBalance()) {
-        				if(claim.getClaimAmount()<= product.getCoverageAmount()) {
+        		System.out.println(hi.getAge());
+        		if(product.getCoverageDescription().contains(claimRecord.getCauseOfLoss())) {
+        			System.out.println(product.getCoverageDescription());
+        			if(claimRecord.getClaimAmount()<= hi.getCoverageBalance()) {
+        				System.out.println(claimRecord.getClaimAmount());
+        				if(claimRecord.getClaimAmount()<= product.getCoverageAmount()) {
+        					System.out.println(claimRecord.getClaimAmount());
         					return true;
         				}
         			}
@@ -90,7 +107,7 @@ public class ClaimsService {
         	}
         	
         }
-        if(product.getProductName()=="Vehicle") {
+        if(product.getProductCode().equals("Vehicle")) {
         VehicleInsurance hi = vehicleinsurancerepository.getById(policyId);
         
         LocalDate localDate = hi.getFcDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
@@ -98,9 +115,12 @@ public class ClaimsService {
         // Get the current date
         LocalDate currentDate = LocalDate.now();
         	if(localDate.isAfter(currentDate)) {
-        		if(product.getCoverageDescription().contains(claim.getCauseOfLoss())) {
-        			if(claim.getClaimAmount()<= hi.getCoverageBalance()) {
-        				if(claim.getClaimAmount()<= product.getCoverageAmount()) {
+        		System.out.println(localDate.isAfter(currentDate));
+        		if(product.getCoverageDescription().contains(claimRecord.getCauseOfLoss())) {
+        			System.out.println(product.getCoverageDescription());
+        			if(claimRecord.getClaimAmount()<= hi.getCoverageBalance()) {
+        				System.out.println(claimRecord.getClaimAmount());
+        				if(claimRecord.getClaimAmount()<= product.getCoverageAmount()) {
         					return true;
         				}
         			}
@@ -108,14 +128,14 @@ public class ClaimsService {
         	}
         	
         }
-        if(product.getProductName()=="Home") {
+        if(product.getProductCode().equals("Home")) {
             HomeInsurance hi = homeinsurancerepository.getById(policyId);
             
             
             	if(hi.getAssetValue()>1000000) {
-            		if(product.getCoverageDescription().contains(claim.getCauseOfLoss())) {
-            			if(claim.getClaimAmount()<= hi.getCoverageBalance()) {
-            				if(claim.getClaimAmount()<= product.getCoverageAmount()) {
+            		if(product.getCoverageDescription().contains(claimRecord.getCauseOfLoss())) {
+            			if(claimRecord.getClaimAmount()<= hi.getCoverageBalance()) {
+            				if(claimRecord.getClaimAmount()<= product.getCoverageAmount()) {
             					return true;
             				}
             			}

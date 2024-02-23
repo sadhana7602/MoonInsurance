@@ -20,10 +20,11 @@ public class Claims {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	protected int recordId;
+	protected int claimId;
+	protected int policyId;
 	protected String policyNo;
 	protected int  productId;
-	protected int CustomerId;
+	protected int customerId;
 	protected String claimNo;
 	protected Date claimEntryDate;
 	protected String causeOfLoss;

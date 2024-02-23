@@ -18,31 +18,31 @@ public class QueryResource {
     @Autowired
     private QueryService queryService;
 
-    @PostMapping
+    @PostMapping("/add")
     public ResponseEntity<Query> createQuery(@RequestBody Query query) {
         Query createdQuery = queryService.createQuery(query);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdQuery);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     public ResponseEntity<Query> getQueryById(@PathVariable int id) {
         Optional<Query> queryOptional = queryService.getQueryById(id);
         return queryOptional.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<Query>> getAllQueries() {
         List<Query> queries = queryService.getAllQueries();
         return ResponseEntity.ok(queries);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Query> updateQuery(@PathVariable int id, @RequestBody Query updatedQuery) {
-        Query query = queryService.updateQuery(id, updatedQuery);
+    @PutMapping("/update")
+    public ResponseEntity<Query> updateQuery(@RequestBody Query updatedQuery) {
+        Query query = queryService.updateQuery(updatedQuery);
         return ResponseEntity.ok(query);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteQuery(@PathVariable int id) {
         queryService.deleteQuery(id);
         return ResponseEntity.noContent().build();
