@@ -74,17 +74,24 @@ public class ClaimsService {
     	String pid = pno.substring(7); // Extracting last 3 digits
         int policyId = Integer.parseInt(pid); // Converting to integer to remove leading zeros
         System.out.println(policyId);
-        //Claims claim= claimsrepository.getById(recordId);
         
         List<Claims> claimsList = claimsrepository.findAll();
         System.out.println(claimsList);
         Claims claimRecord = null;
-        
+                
         for(Claims claim : claimsList) {
-        	if(claim.getPolicyId() == policyId) {
+        	System.out.println(claim.getPolicyId() + " " + claim.getPolicyNo() + " " + claim.getProductId() +" "+ claim.getClaimId() +" "+ claim.getClaimNo());
+        	if( (claim.getPolicyNo().equals(pno)) && (claim.getProductId() == 1) ) {
+        		claimRecord = claimsrepository.getById(claim.getClaimId());
+        	}
+        	else if( (claim.getPolicyNo().equals(pno)) && (claim.getProductId() == 2) ) {
+        		claimRecord = claimsrepository.getById(claim.getClaimId());
+        	}
+        	else if( (claim.getPolicyNo().equals(pno)) && (claim.getProductId() == 3) ) {
         		claimRecord = claimsrepository.getById(claim.getClaimId());
         	}
         }
+        
         System.out.println(claimRecord);
         PolicyProduct product= policyproductrepository.getById(claimRecord.getProductId());
         System.out.println(product);
@@ -107,11 +114,11 @@ public class ClaimsService {
         	}
         	
         }
-        if(product.getProductCode().equals("Vehicle")) {
+        else if(product.getProductCode().equals("Auto")) {
         VehicleInsurance hi = vehicleinsurancerepository.getById(policyId);
         
         LocalDate localDate = hi.getFcDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        
+        System.out.println(localDate);
         // Get the current date
         LocalDate currentDate = LocalDate.now();
         	if(localDate.isAfter(currentDate)) {
@@ -128,13 +135,16 @@ public class ClaimsService {
         	}
         	
         }
-        if(product.getProductCode().equals("Home")) {
+        else if(product.getProductCode().equals("Home")) {
             HomeInsurance hi = homeinsurancerepository.getById(policyId);
             
-            
-            	if(hi.getAssetValue()>1000000) {
+            System.out.println(hi);
+            	if(hi.getAssetValue()>10000) {
+            		System.out.println(hi.getAssetValue());
             		if(product.getCoverageDescription().contains(claimRecord.getCauseOfLoss())) {
+            			System.out.println(product.getCoverageDescription() + " " + claimRecord.getCauseOfLoss());
             			if(claimRecord.getClaimAmount()<= hi.getCoverageBalance()) {
+            				System.out.println(claimRecord.getClaimAmount() + " " + hi.getCoverageBalance() + " " + product.getCoverageAmount());
             				if(claimRecord.getClaimAmount()<= product.getCoverageAmount()) {
             					return true;
             				}
@@ -143,7 +153,6 @@ public class ClaimsService {
             	}
             	
             }
-        
         
     	return false;
     }
