@@ -25,7 +25,7 @@ public class Customer {
     private String Name;
     private LocalDate dateOfBirth;
     private String email;
-    private String phoneNumber;
+    private int phone;
     private String password;
     private String address;
     

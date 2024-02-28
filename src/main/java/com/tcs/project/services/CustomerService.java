@@ -15,6 +15,7 @@ import com.tcs.project.repository.CustomerRepository;
 import com.tcs.project.repository.PolicyProductRepository;
 import com.tcs.project.repository.PurchasedPolicyRepository;
 import com.tcs.project.resource.Customer;
+import com.tcs.project.resource.LoginDto;
 import com.tcs.project.resource.PolicyProduct;
 import com.tcs.project.resource.PurchasedPolicies;
 
@@ -42,7 +43,7 @@ public class CustomerService {
 		return customer.get();
 	}
 	
-	public Customer registerCustomer(Customer customerD) {
+	public boolean registerCustomer(Customer customerD) {
 		
     
 	
@@ -55,14 +56,14 @@ public class CustomerService {
         message.setText("Dear "+customer.getName()+",\n\n\nThank you for registering with us.Below are the details:\n\n"+
         "\nCustomerId : "+customer.getCustomerid()+
         "\nCustomer Name : "+customer.getName()+
-        "\nCustomer Phone number: "+customer.getPhoneNumber()+
+        "\nCustomer Phone number: "+customer.getPhone()+
         "\nCustomer Address: "+customer.getAddress()
         +"\n\n\nBest regards,\nMoon Insurance");
         
         System.out.println(customer);
         
         mailSender.send(message);
-        return customer;
+        return true;
 		
 		
 	}
@@ -75,7 +76,7 @@ public class CustomerService {
 		temp.setAddress(customer.getAddress());
 		temp.setEmail(customer.getEmail());
 		temp.setPassword(customer.getPassword());
-		temp.setPhoneNumber(customer.getPhoneNumber());
+		temp.setPhone(customer.getPhone());
 		 return customerrepository.save(temp);
 		
 				
@@ -85,31 +86,39 @@ public class CustomerService {
     	customerrepository.deleteById(id);
     	return true;
     }
-    public ArrayList<Object[]> allCustomerPurchasedPolicies(Customer customer) {
-    	
-    			ArrayList<Object[]> policyDetails = new ArrayList<>();
-    			ArrayList<PurchasedPolicies> purchasedpolicies= (ArrayList<PurchasedPolicies>) purchasedpolicyrepository.findAll();
-    	
-    			for (PurchasedPolicies policy : purchasedpolicies) {
-    				if(policy.getCustomerId()==customer.getCustomerid())
-    				{     Object[] details = new Object[7];
-	    					details[0] = policy.getPolicyNo();
-	    					details[5] = policy.getEffectiveDate();
-	    					details[6] = policy.getExpiryDate();
-	    					details[7] = policy.getNominee();
-	    	
-	    				
-	    					details[1] = customer.getCustomerid();
-	    					details[2] = customer.getName();
-	    	
-	    					PolicyProduct product = policyproductrepository.findById(policy.getProductId()).orElse(null);
-	    					details[3] = product.getProductTier();
-	    					details[4] = product.getCoverageAmount();
-	    	
-	    				policyDetails.add(details);
-	    				
-    				}
-    			   }
-    			return policyDetails;
-    		}
+//    public ArrayList<Object[]> allCustomerPurchasedPolicies(Customer customer) {
+//    	
+//    			ArrayList<Object[]> policyDetails = new ArrayList<>();
+//    			ArrayList<PurchasedPolicies> purchasedpolicies= (ArrayList<PurchasedPolicies>) purchasedpolicyrepository.findAll();
+//    	
+//    			for (PurchasedPolicies policy : purchasedpolicies) {
+//    				if(policy.getCustomerId()==customer.getCustomerid())
+//    				{     Object[] details = new Object[7];
+//	    					details[0] = policy.getPolicyNo();
+//	    					details[5] = policy.getEffectiveDate();
+//	    					details[6] = policy.getExpiryDate();
+//	    					details[7] = policy.getNominee();
+//	    	
+//	    				
+//	    					details[1] = customer.getCustomerid();
+//	    					details[2] = customer.getName();
+//	    	
+//	    					PolicyProduct product = policyproductrepository.findById(policy.getProductId()).orElse(null);
+//	    					details[3] = product.getProductTier();
+//	    					details[4] = product.getCoverageAmount();
+//	    	
+//	    				policyDetails.add(details);
+//	    				
+//    				}
+//    			   }
+//    			return policyDetails;
+//    		}
+    public String Login(LoginDto logindto) {
+    	Optional<Customer> customer=customerrepository.findOneByEmailAndPassword(logindto.getEmail(), logindto.getPassword());
+    	if (customer.isPresent()) {
+            return "true";
+        } else {
+            return "false";
+        }
+    }
 }
