@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
+@CrossOrigin("http://localhost:4200")
 @RequestMapping("/claims")
 public class ClaimsResource {
 	
@@ -37,10 +39,10 @@ public class ClaimsResource {
 	}
 	
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
-			produces = MediaType.APPLICATION_JSON_VALUE,
+			
 			value = "/add")
-	public ResponseEntity<Claims> createPurchasedPolicy(@RequestBody Claims claim){
-		return new ResponseEntity<Claims> (claimservice.createClaim(claim), HttpStatus.CREATED);
+	public ResponseEntity<Boolean> createPurchasedPolicy(@RequestBody Claims claim){
+		return new ResponseEntity<Boolean> (claimservice.createClaim(claim), HttpStatus.CREATED);
 	}
 	
 	@PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -55,9 +57,9 @@ public class ClaimsResource {
 	public boolean deleteClaim(@PathVariable("id") Integer id){
 		return claimservice.deleteClaim(id);
 	}
-	@GetMapping("/adminvalidate/{id}")
-	public boolean adminvalidationHandler(@PathVariable("id") int No){
-		return claimservice.adminvalidation(No);
+	@PostMapping("/adminvalidate")
+	public boolean adminvalidationHandler(@RequestBody int pid){
+		return claimservice.adminvalidation(pid);
 	}
 	
 }

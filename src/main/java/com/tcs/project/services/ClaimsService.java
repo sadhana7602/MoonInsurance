@@ -48,20 +48,22 @@ public class ClaimsService {
 		return  claim.get();
 	}
 	
-    public Claims createClaim(Claims claim) {
-    	return (Claims) claimsrepository.save(claim);
+    public boolean createClaim(Claims claim) {
+    	claimsrepository.save(claim);
+    	return true;
     }
     
     public Claims updateClaim(Claims claim) {
     	Optional<Claims> optional= claimsrepository.findById(claim.getClaimId());
     	Claims tempClaim= optional.get();
     	tempClaim.setPolicyId(claim.getPolicyId());
-    	tempClaim.setClaimNo(claim.getClaimNo());
+    	
     	tempClaim.setCustomerId(claim.getCustomerId());
     	tempClaim.setProductId(claim.getProductId());
     	tempClaim.setClaimEntryDate(claim.getClaimEntryDate());
     	tempClaim.setCauseOfLoss(claim.getCauseOfLoss());
     	tempClaim.setClaimAmount(claim.getClaimAmount());
+    	tempClaim.setStatus(claim.getStatus());
     	return (Claims) claimsrepository.save(tempClaim);
     }
 	
@@ -75,28 +77,14 @@ public class ClaimsService {
         //int policyId = Integer.parseInt(pid); // Converting to integer to remove leading zeros
         //System.out.println(policyId);
         
-        List<Claims> claimsList = claimsrepository.findAll();
-        System.out.println(claimsList);
-        Claims claimRecord = null;
-                
-        for(Claims claim : claimsList) {
-        	System.out.println(claim.getPolicyId() + " " + claim.getPolicyNo() + " " + claim.getProductId() +" "+ claim.getClaimId() +" "+ claim.getClaimNo());
-        	if( (claim.getPolicyId()==policyId) && (claim.getProductId() == 1) ) {
-        		claimRecord = claimsrepository.getById(claim.getClaimId());
-        	}
-        	else if( (claim.getPolicyId()==policyId) && (claim.getProductId() == 2) ) {
-        		claimRecord = claimsrepository.getById(claim.getClaimId());
-        	}
-        	else if( (claim.getPolicyId()==policyId) && (claim.getProductId() == 3) ) {
-        		claimRecord = claimsrepository.getById(claim.getClaimId());
-        	}
-        }
+        Claims claimRecord=claimsrepository.findByPolicyId(policyId);
+        
         
         System.out.println(claimRecord);
         PolicyProduct product= policyproductrepository.getById(claimRecord.getProductId());
         System.out.println(product);
         
-        if(product.getProductCode().equals("Health")) {
+        if(product.getProductName().equals("Health")) {
         	HealthInsurance hi = healthinsurancerepository.getById(policyId);
         	
         	if(hi.getAge()>18 && hi.getAge()<60) {
@@ -107,6 +95,8 @@ public class ClaimsService {
         				System.out.println(claimRecord.getClaimAmount());
         				if(claimRecord.getClaimAmount()<= product.getCoverageAmount()) {
         					System.out.println(claimRecord.getClaimAmount());
+        					claimRecord.setStatus("APPROVED");
+        					claimsrepository.save(claimRecord);
         					return true;
         				}
         			}
@@ -114,7 +104,7 @@ public class ClaimsService {
         	}
         	
         }
-        else if(product.getProductCode().equals("Auto")) {
+        else if(product.getProductName().equals("Auto")) {
         VehicleInsurance hi = vehicleinsurancerepository.getById(policyId);
         
         LocalDate localDate = hi.getFcDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
@@ -128,6 +118,8 @@ public class ClaimsService {
         			if(claimRecord.getClaimAmount()<= hi.getCoverageBalance()) {
         				System.out.println(claimRecord.getClaimAmount());
         				if(claimRecord.getClaimAmount()<= product.getCoverageAmount()) {
+        					claimRecord.setStatus("APPROVED");
+        					claimsrepository.save(claimRecord);
         					return true;
         				}
         			}
@@ -135,7 +127,7 @@ public class ClaimsService {
         	}
         	
         }
-        else if(product.getProductCode().equals("Home")) {
+        else if(product.getProductName().equals("Home")) {
             HomeInsurance hi = homeinsurancerepository.getById(policyId);
             
             System.out.println(hi);
@@ -146,6 +138,9 @@ public class ClaimsService {
             			if(claimRecord.getClaimAmount()<= hi.getCoverageBalance()) {
             				System.out.println(claimRecord.getClaimAmount() + " " + hi.getCoverageBalance() + " " + product.getCoverageAmount());
             				if(claimRecord.getClaimAmount()<= product.getCoverageAmount()) {
+            					claimRecord.setStatus("APPROVED");
+            					claimsrepository.save(claimRecord);
+            					
             					return true;
             				}
             			}
@@ -153,7 +148,9 @@ public class ClaimsService {
             	}
             	
             }
-        
+        if(claimRecord.getStatus().equalsIgnoreCase("Pending")) {
+        	claimRecord.setStatus("Not Approved");
+        }
     	return false;
     }
 }

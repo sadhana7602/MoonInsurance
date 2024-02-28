@@ -22,12 +22,14 @@ public class Claims {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	protected int claimId;
 	protected int policyId;
-	protected String policyNo;
+	
 	protected int  productId;
 	protected int customerId;
-	protected String claimNo;
+	
 	protected Date claimEntryDate;
 	protected String causeOfLoss;
 	protected Double claimAmount;
+	
+	protected String status;
 	
 }
