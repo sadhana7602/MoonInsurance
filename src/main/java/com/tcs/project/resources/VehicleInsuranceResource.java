@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,10 +17,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tcs.project.resource.PolicyProduct;
+import com.tcs.project.resource.VehicleDto;
 import com.tcs.project.resource.VehicleInsurance;
 import com.tcs.project.services.VehicleInsuranceService;
 
 @RestController
+@CrossOrigin("http://localhost:4200")
 @RequestMapping("/vehicle-insurance")
 public class VehicleInsuranceResource {
  
@@ -37,9 +41,9 @@ public class VehicleInsuranceResource {
     }
     
     @PostMapping("/add")
-    public ResponseEntity<VehicleInsurance> createVehicleInsurance(@RequestBody VehicleInsurance vehicleInsurance) {
-        VehicleInsurance createdInsurance = vehicleInsuranceService.createVehicleInsurance(vehicleInsurance);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdInsurance);
+    public ResponseEntity<Boolean> createVehicleInsurance(@RequestBody VehicleDto vehicledto) {
+       boolean success= vehicleInsuranceService.createVehicleInsurance(vehicledto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(success);
     }
     
     @PutMapping("/update")
@@ -53,9 +57,9 @@ public class VehicleInsuranceResource {
         return vehicleInsuranceService.deleteVehicleInsurance(id);
     }
     
-    @GetMapping("/adminall")
-	public ResponseEntity<ArrayList<Object[]>> allAdminPurchasedPolicies(){
-		return new ResponseEntity<ArrayList<Object[]>> (vehicleInsuranceService.allAdminPurchasedPolicies() ,HttpStatus.OK);
-	}
     
+    @GetMapping("/vehicleall")
+	public ResponseEntity<List<PolicyProduct>> allHealthPolicies(){
+		return new ResponseEntity<List<PolicyProduct>> (vehicleInsuranceService.allVehiclePolicies() ,HttpStatus.OK);
+	}
 }

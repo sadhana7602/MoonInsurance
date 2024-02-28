@@ -22,14 +22,14 @@ public class HomeInsurance {
     private int policyId;
     private int productId;
     private int customerId;
-    private String policyNo;
-    private char gender;
+    //private String policyNo;
+    private String gender;
     private int age;
     private Date effectiveDate;
     private Date expiryDate;
     private String nominee;
     private Double coverageBalance;
-    private int renewal;
+    //private int renewal;
     private String homeType;
     private Double builtArea;
     private Double assetValue;

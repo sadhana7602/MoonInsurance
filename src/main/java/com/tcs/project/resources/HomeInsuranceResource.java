@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,10 +17,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tcs.project.resource.HomeDto;
 import com.tcs.project.resource.HomeInsurance;
+import com.tcs.project.resource.PolicyProduct;
 import com.tcs.project.services.HomeInsuranceService;
 
 @RestController
+@CrossOrigin("http://localhost:4200")
 @RequestMapping("/home-insurance")
 public class HomeInsuranceResource {
 	@Autowired
@@ -38,8 +42,8 @@ public class HomeInsuranceResource {
     }
     
     @PostMapping("/add")
-    public ResponseEntity<HomeInsurance> createHomeInsurance(@RequestBody HomeInsurance homeInsurance) {
-        HomeInsurance createdHomeInsurance = homeInsuranceService.createHomeInsurance(homeInsurance);
+    public ResponseEntity<Boolean> createHomeInsurance(@RequestBody HomeDto homedto) {
+        boolean createdHomeInsurance = homeInsuranceService.createHomeInsurance(homedto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdHomeInsurance);
     }
  
@@ -54,8 +58,10 @@ public class HomeInsuranceResource {
         return homeInsuranceService.deleteHomeInsurance(id);
     }
     
-    @GetMapping("/adminall")
-	public ResponseEntity<ArrayList<Object[]>> allAdminPurchasedPolicies(){
-		return new ResponseEntity<ArrayList<Object[]>> (homeInsuranceService.allAdminPurchasedPolicies() ,HttpStatus.OK);
+    
+    @GetMapping("/homeall")
+	public ResponseEntity<List<PolicyProduct>> allHealthPolicies(){
+		return new ResponseEntity<List<PolicyProduct>> (homeInsuranceService.allHomePolicies() ,HttpStatus.OK);
 	}
 }
+

@@ -70,10 +70,10 @@ public class ClaimsService {
     	return true;
 	}
     
-    public boolean adminvalidation(String pno){
-    	String pid = pno.substring(7); // Extracting last 3 digits
-        int policyId = Integer.parseInt(pid); // Converting to integer to remove leading zeros
-        System.out.println(policyId);
+    public boolean adminvalidation(int policyId){
+    	//String pid = pno.substring(7); // Extracting last 3 digits
+        //int policyId = Integer.parseInt(pid); // Converting to integer to remove leading zeros
+        //System.out.println(policyId);
         
         List<Claims> claimsList = claimsrepository.findAll();
         System.out.println(claimsList);
@@ -81,13 +81,13 @@ public class ClaimsService {
                 
         for(Claims claim : claimsList) {
         	System.out.println(claim.getPolicyId() + " " + claim.getPolicyNo() + " " + claim.getProductId() +" "+ claim.getClaimId() +" "+ claim.getClaimNo());
-        	if( (claim.getPolicyNo().equals(pno)) && (claim.getProductId() == 1) ) {
+        	if( (claim.getPolicyId()==policyId) && (claim.getProductId() == 1) ) {
         		claimRecord = claimsrepository.getById(claim.getClaimId());
         	}
-        	else if( (claim.getPolicyNo().equals(pno)) && (claim.getProductId() == 2) ) {
+        	else if( (claim.getPolicyId()==policyId) && (claim.getProductId() == 2) ) {
         		claimRecord = claimsrepository.getById(claim.getClaimId());
         	}
-        	else if( (claim.getPolicyNo().equals(pno)) && (claim.getProductId() == 3) ) {
+        	else if( (claim.getPolicyId()==policyId) && (claim.getProductId() == 3) ) {
         		claimRecord = claimsrepository.getById(claim.getClaimId());
         	}
         }

@@ -55,8 +55,8 @@ public class ClaimsResource {
 	public boolean deleteClaim(@PathVariable("id") Integer id){
 		return claimservice.deleteClaim(id);
 	}
-	@GetMapping("/adminvalidate/{no}")
-	public boolean adminvalidationHandler(@PathVariable("no") String No){
+	@GetMapping("/adminvalidate/{id}")
+	public boolean adminvalidationHandler(@PathVariable("id") int No){
 		return claimservice.adminvalidation(No);
 	}
 	

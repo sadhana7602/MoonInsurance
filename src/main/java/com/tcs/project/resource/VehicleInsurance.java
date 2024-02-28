@@ -23,13 +23,13 @@ public class VehicleInsurance {
     private int productId;
     private int customerId;
     private String policyNo;
-    private char gender;
+    private String gender;
     private int age;
     private Date effectiveDate;
     private Date expiryDate;
     private String nominee;
     private Double coverageBalance;
-    private int renewal;
+    //private int renewal;
     private String model;
     private String make;
     private Date fcDate;

@@ -8,4 +8,5 @@ import com.tcs.project.resource.HealthInsurance;
 @Repository
 public interface HealthInsuranceRepository extends JpaRepository<HealthInsurance, Integer> {
 
+
 }

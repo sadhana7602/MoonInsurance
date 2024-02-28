@@ -10,9 +10,12 @@ import com.tcs.project.repository.CustomerRepository;
 import com.tcs.project.repository.HealthInsuranceRepository;
 import com.tcs.project.repository.PolicyProductRepository;
 import com.tcs.project.resource.Customer;
+import com.tcs.project.resource.HealthDto;
 import com.tcs.project.resource.HealthInsurance;
 import com.tcs.project.resource.PolicyProduct;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -35,17 +38,31 @@ public class HealthInsuranceService {
     public Optional<HealthInsurance> getHealthInsuranceById(int id) {
         return healthInsuranceRepository.findById(id);
     }
-    public HealthInsurance createHealthInsurance(HealthInsurance healthInsurance) {
+    public boolean createHealthInsurance(HealthDto healthDto) {
         //return healthInsuranceRepository.save(healthInsurance);
     	
     	SimpleMailMessage message = new SimpleMailMessage();
+    	HealthInsurance healthInsurance= new HealthInsurance();
+    	PolicyProduct pp= policyproductrepository.getById(healthDto.getProductId());
+    	healthInsurance.setProductId(healthDto.getProductId());
+    	healthInsurance.setCustomerId(healthDto.getCustomerId());
+    	healthInsurance.setGender(healthDto.getGender());
+    	healthInsurance.setAge(healthDto.getAge());
+    	healthInsurance.setNominee(healthDto.getNominee());
+    	healthInsurance.setCoverageBalance(pp.getCoverageAmount());
+    	LocalDate currentDate = LocalDate.now();
+    	LocalDate enddate = currentDate.plusYears(pp.getTenure());
+    	healthInsurance.setEffectiveDate(Date.valueOf(currentDate));
+    	healthInsurance.setExpiryDate(Date.valueOf(enddate));
+    	
+    	
     	HealthInsurance purchasedPolicy=(HealthInsurance) healthInsuranceRepository.save(healthInsurance);
         Customer customer=customerrepository.getById(healthInsurance.getCustomerId());
         PolicyProduct policy=policyproductrepository.getById(healthInsurance.getProductId());
 		message.setFrom("javafsdgroup@gmail.com");
         message.setTo(customer.getEmail());
         message.setSubject("Health Insurance Policy Purchase Confirmation");
-        message.setText("Dear "+customer.getName()+",\n\nThank you for purchasing a policy. Below are the details:\n\nPolicyNo: "+purchasedPolicy.getPolicyNo()
+        message.setText("Dear "+customer.getName()+",\n\nThank you for purchasing a policy. Below are the details:\n\nPolicyNo: "+purchasedPolicy.getPolicyId()
         		+"\nPolicy Name :"+policy.getProductName()
         		+"\nPremium:"+policy.getProductPremium()
         		+"\nEffective Date :"+purchasedPolicy.getEffectiveDate()
@@ -57,7 +74,7 @@ public class HealthInsuranceService {
         
         mailSender.send(message);
     
-		return purchasedPolicy;
+		return true;
     }
     public HealthInsurance updateHealthInsurance(HealthInsurance updatedHealthInsurance) {
     	
@@ -75,33 +92,18 @@ public class HealthInsuranceService {
         return true;
     }
 
-	public ArrayList<Object[]> allAdminPurchasedPolicies() {
+	public List<PolicyProduct> allHealthPolicies() {
 
-		ArrayList<Object[]> policyDetails = new ArrayList<>();
-		ArrayList<HealthInsurance> purchasedpolicies = (ArrayList<HealthInsurance>) healthInsuranceRepository.findAll();
+		//ArrayList<Object[]> policyDetails = new ArrayList<>();
+		List<PolicyProduct> purchasedpolicies = policyproductrepository.findByProductName("Health");
 
-		for (HealthInsurance policy : purchasedpolicies) {
-			Object[] details = new Object[8];
-			details[0] = policy.getPolicyNo();
-			details[5] = policy.getEffectiveDate();
-			details[6] = policy.getExpiryDate();
-			details[7] = policy.getNominee();
-
-			Customer customer = customerrepository.findById(policy.getCustomerId()).orElse(null);
-			details[1] = customer.getCustomerid();
-			details[2] = customer.getName();
-
-			PolicyProduct product = policyproductrepository.findById(policy.getProductId()).orElse(null);
-			details[3] = product.getProductTier();
-			details[4] = product.getCoverageAmount();
-
-			policyDetails.add(details);
-		}
 		
-		for (HealthInsurance policy : purchasedpolicies) {
+		
+		
+		for (PolicyProduct policy : purchasedpolicies) {
 			System.out.println(policy);
 		}
-		return policyDetails;
+		return purchasedpolicies;
 	}
 }
 

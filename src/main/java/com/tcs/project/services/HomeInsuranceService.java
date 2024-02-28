@@ -1,5 +1,7 @@
 package com.tcs.project.services;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -13,8 +15,10 @@ import com.tcs.project.repository.CustomerRepository;
 import com.tcs.project.repository.HomeInsuranceRepository;
 import com.tcs.project.repository.PolicyProductRepository;
 import com.tcs.project.resource.Customer;
+import com.tcs.project.resource.HomeDto;
 import com.tcs.project.resource.HomeInsurance;
 import com.tcs.project.resource.PolicyProduct;
+import com.tcs.project.resource.VehicleInsurance;
 
 @Service
 public class HomeInsuranceService {
@@ -33,17 +37,35 @@ public class HomeInsuranceService {
     public Optional<HomeInsurance> getHomeInsuranceById(int id) {
         return homeInsuranceRepository.findById(id);
     }
-    public HomeInsurance createHomeInsurance(HomeInsurance homeInsurance) {
+    public boolean createHomeInsurance(HomeDto homedto) {
         //return homeInsuranceRepository.save(homeInsurance);
     	
     	SimpleMailMessage message = new SimpleMailMessage();
-    	HomeInsurance purchasedPolicy=(HomeInsurance) homeInsuranceRepository.save(homeInsurance);
-        Customer customer=customerrepository.getById(homeInsurance.getCustomerId());
-        PolicyProduct policy=policyproductrepository.getById(homeInsurance.getProductId());
+    	HomeInsurance homeinsurance = new HomeInsurance();
+    	PolicyProduct pp= policyproductrepository.getById(homedto.getProductId());
+    	homeinsurance.setProductId(homedto.getProductId());
+    	homeinsurance.setCustomerId(homedto.getCustomerId());
+    	homeinsurance.setGender(homedto.getGender());
+    	homeinsurance.setAge(homedto.getAge());
+    	homeinsurance.setNominee(homedto.getNominee());
+    	homeinsurance.setHomeType(homedto.getHomeType());
+    	homeinsurance.setBuiltArea(homedto.getBuildArea());
+    	homeinsurance.setAssetValue(homedto.getAssetValue());
+    	
+    	homeinsurance.setCoverageBalance(pp.getCoverageAmount());
+    	LocalDate currentDate = LocalDate.now();
+    	LocalDate enddate = currentDate.plusYears(pp.getTenure());
+    	homeinsurance.setEffectiveDate(Date.valueOf(currentDate));
+    	homeinsurance.setExpiryDate(Date.valueOf(enddate));
+    	
+    	
+    	HomeInsurance purchasedPolicy=(HomeInsurance) homeInsuranceRepository.save(homeinsurance);
+        Customer customer=customerrepository.getById(homeinsurance.getCustomerId());
+        PolicyProduct policy=policyproductrepository.getById(homeinsurance.getProductId());
 		message.setFrom("javafsdgroup@gmail.com");
         message.setTo(customer.getEmail());
         message.setSubject("Home Insurance Policy Purchase Confirmation");
-        message.setText("Dear "+customer.getName()+",\n\nThank you for purchasing a policy. Below are the details:\n\nPolicyNo: "+purchasedPolicy.getPolicyNo()
+        message.setText("Dear "+customer.getName()+",\n\nThank you for purchasing a policy. Below are the details:\n\nPolicyNo: "+purchasedPolicy.getPolicyId()
         		+"\nPolicy Name :"+policy.getProductName()
         		+"\nPremium:"+policy.getProductPremium()
         		+"\nEffective Date :"+purchasedPolicy.getEffectiveDate()
@@ -55,7 +77,7 @@ public class HomeInsuranceService {
         
         mailSender.send(message);
     
-		return purchasedPolicy;
+		return true;
     }
     public HomeInsurance updateHomeInsurance(HomeInsurance updatedHomeInsurance) {
     	
@@ -73,32 +95,17 @@ public class HomeInsuranceService {
         return true;
     }
 
-	public ArrayList<Object[]> allAdminPurchasedPolicies() {
+    public List<PolicyProduct> allHomePolicies() {
 
-		ArrayList<Object[]> policyDetails = new ArrayList<>();
-		ArrayList<HomeInsurance> purchasedpolicies = (ArrayList<HomeInsurance>) homeInsuranceRepository.findAll();
+		//ArrayList<Object[]> policyDetails = new ArrayList<>();
+		List<PolicyProduct> purchasedpolicies = policyproductrepository.findByProductName("Home");
 
-		for (HomeInsurance policy : purchasedpolicies) {
-			Object[] details = new Object[8];
-			details[0] = policy.getPolicyNo();
-			details[5] = policy.getEffectiveDate();
-			details[6] = policy.getExpiryDate();
-			details[7] = policy.getNominee();
-
-			Customer customer = customerrepository.findById(policy.getCustomerId()).orElse(null);
-			details[1] = customer.getCustomerid();
-			details[2] = customer.getName();
-
-			PolicyProduct product = policyproductrepository.findById(policy.getProductId()).orElse(null);
-			details[3] = product.getProductTier();
-			details[4] = product.getCoverageAmount();
-
-			policyDetails.add(details);
-		}
 		
-		for (HomeInsurance policy : purchasedpolicies) {
+		
+		
+		for (PolicyProduct policy : purchasedpolicies) {
 			System.out.println(policy);
 		}
-		return policyDetails;
+		return purchasedpolicies;
 	}
 }

@@ -1,5 +1,7 @@
 package com.tcs.project.services;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +17,7 @@ import com.tcs.project.repository.VehicleInsuranceRepository;
 import com.tcs.project.resource.Customer;
 import com.tcs.project.resource.HealthInsurance;
 import com.tcs.project.resource.PolicyProduct;
+import com.tcs.project.resource.VehicleDto;
 import com.tcs.project.resource.VehicleInsurance;
 
 @Service
@@ -35,17 +38,35 @@ public class VehicleInsuranceService {
     public Optional<VehicleInsurance> getVehicleInsuranceById(int id) {
         return vehicleInsuranceRepository.findById(id);
     }
-    public VehicleInsurance createVehicleInsurance(VehicleInsurance vehicleInsurance) {
+    public boolean createVehicleInsurance(VehicleDto vehicledto) {
         //return vehicleInsuranceRepository.save(vehicleInsurance);
     	
     	SimpleMailMessage message = new SimpleMailMessage();
-    	VehicleInsurance purchasedPolicy=(VehicleInsurance) vehicleInsuranceRepository.save(vehicleInsurance);
-        Customer customer=customerrepository.getById(vehicleInsurance.getCustomerId());
-        PolicyProduct policy=policyproductrepository.getById(vehicleInsurance.getProductId());
+    	VehicleInsurance vehicleinsurance = new VehicleInsurance();
+    	PolicyProduct pp= policyproductrepository.getById(vehicledto.getProductId());
+    	vehicleinsurance.setProductId(vehicledto.getProductId());
+    	vehicleinsurance.setCustomerId(vehicledto.getCustomerId());
+    	vehicleinsurance.setGender(vehicledto.getGender());
+    	vehicleinsurance.setAge(vehicledto.getAge());
+    	vehicleinsurance.setNominee(vehicledto.getNominee());
+    	vehicleinsurance.setMake(vehicledto.getMake());
+    	vehicleinsurance.setModel(vehicledto.getModel());
+    	vehicleinsurance.setFcDate(vehicledto.getFcDate());
+    	
+    	vehicleinsurance.setCoverageBalance(pp.getCoverageAmount());
+    	LocalDate currentDate = LocalDate.now();
+    	LocalDate enddate = currentDate.plusYears(pp.getTenure());
+    	vehicleinsurance.setEffectiveDate(Date.valueOf(currentDate));
+    	vehicleinsurance.setExpiryDate(Date.valueOf(enddate));
+    
+    	
+    	VehicleInsurance purchasedPolicy=(VehicleInsurance) vehicleInsuranceRepository.save(vehicleinsurance);
+        Customer customer=customerrepository.getById(vehicleinsurance.getCustomerId());
+        PolicyProduct policy=policyproductrepository.getById(vehicleinsurance.getProductId());
 		message.setFrom("javafsdgroup@gmail.com");
         message.setTo(customer.getEmail());
         message.setSubject("Vehicle Insurance Policy Purchase Confirmation");
-        message.setText("Dear "+customer.getName()+",\n\nThank you for purchasing a policy. Below are the details:\n\nPolicyNo: "+purchasedPolicy.getPolicyNo()
+        message.setText("Dear "+customer.getName()+",\n\nThank you for purchasing a policy. Below are the details:\n\nPolicyNo: "+purchasedPolicy.getPolicyId()
         		+"\nPolicy Name :"+policy.getProductName()
         		+"\nPremium:"+policy.getProductPremium()
         		+"\nEffective Date :"+purchasedPolicy.getEffectiveDate()
@@ -57,7 +78,7 @@ public class VehicleInsuranceService {
         
         mailSender.send(message);
     
-		return purchasedPolicy;
+		return true;
     }
     public VehicleInsurance updateVehicleInsurance(VehicleInsurance updatedVehicleInsurance) {      
         
@@ -76,31 +97,17 @@ public class VehicleInsuranceService {
         vehicleInsuranceRepository.deleteById(id);
         return true;
     }
-    public ArrayList<Object[]> allAdminPurchasedPolicies() {
+    public List<PolicyProduct> allVehiclePolicies() {
 
-		ArrayList<Object[]> policyDetails = new ArrayList<>();
-		ArrayList<VehicleInsurance> purchasedpolicies = (ArrayList<VehicleInsurance>) vehicleInsuranceRepository.findAll();
+		//ArrayList<Object[]> policyDetails = new ArrayList<>();
+		List<PolicyProduct> purchasedpolicies = policyproductrepository.findByProductName("Auto");
 
-		for (VehicleInsurance policy : purchasedpolicies) {
-			Object[] details = new Object[8];
-			details[0] = policy.getPolicyNo();
-			details[5] = policy.getEffectiveDate();
-			details[6] = policy.getExpiryDate();
-			details[7] = policy.getNominee();
-
-			Customer customer = customerrepository.findById(policy.getCustomerId()).orElse(null);
-			details[1] = customer.getCustomerid();
-			details[2] = customer.getName();
-
-			PolicyProduct product = policyproductrepository.findById(policy.getProductId()).orElse(null);
-			details[3] = product.getProductTier();
-			details[4] = product.getCoverageAmount();
-
-			policyDetails.add(details);
-		}
-		for (VehicleInsurance policy : purchasedpolicies) {
+		
+		
+		
+		for (PolicyProduct policy : purchasedpolicies) {
 			System.out.println(policy);
 		}
-		return policyDetails;
+		return purchasedpolicies;
 	}
 }
