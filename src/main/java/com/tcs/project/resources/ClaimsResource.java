@@ -32,6 +32,10 @@ public class ClaimsResource {
 	public ArrayList<Claims> getAllClaims() {
 		return claimservice.allClaims();	
 	}
+	@GetMapping("/allcustomerclaim")
+	public ArrayList<Claims> getAllCustomerClaims(@RequestBody int cid) {
+		return claimservice.allCustomerClaims(cid);	
+	}
 	
 	@GetMapping("/get/{id}")
 	public ResponseEntity<Claims> getPurchasedPolicies(@PathVariable("id") Integer id){

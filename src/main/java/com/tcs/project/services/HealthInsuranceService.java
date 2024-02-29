@@ -39,7 +39,6 @@ public class HealthInsuranceService {
         return healthInsuranceRepository.findById(id);
     }
     public boolean createHealthInsurance(HealthDto healthDto) {
-        //return healthInsuranceRepository.save(healthInsurance);
     	
     	SimpleMailMessage message = new SimpleMailMessage();
     	HealthInsurance healthInsurance= new HealthInsurance();
@@ -94,11 +93,7 @@ public class HealthInsuranceService {
 
 	public List<PolicyProduct> allHealthPolicies() {
 
-		//ArrayList<Object[]> policyDetails = new ArrayList<>();
 		List<PolicyProduct> purchasedpolicies = policyproductrepository.findByProductName("Health");
-
-		
-		
 		
 		for (PolicyProduct policy : purchasedpolicies) {
 			System.out.println(policy);

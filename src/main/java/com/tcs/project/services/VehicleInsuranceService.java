@@ -39,7 +39,6 @@ public class VehicleInsuranceService {
         return vehicleInsuranceRepository.findById(id);
     }
     public boolean createVehicleInsurance(VehicleDto vehicledto) {
-        //return vehicleInsuranceRepository.save(vehicleInsurance);
     	
     	SimpleMailMessage message = new SimpleMailMessage();
     	VehicleInsurance vehicleinsurance = new VehicleInsurance();
@@ -99,11 +98,7 @@ public class VehicleInsuranceService {
     }
     public List<PolicyProduct> allVehiclePolicies() {
 
-		//ArrayList<Object[]> policyDetails = new ArrayList<>();
 		List<PolicyProduct> purchasedpolicies = policyproductrepository.findByProductName("Auto");
-
-		
-		
 		
 		for (PolicyProduct policy : purchasedpolicies) {
 			System.out.println(policy);

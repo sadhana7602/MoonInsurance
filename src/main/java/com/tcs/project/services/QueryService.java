@@ -39,7 +39,6 @@ public class QueryService {
     }
 
     public Query updateQuery(Query updatedQuery) {
-        //updatedQuery.setQueryId(id);
     	Optional<Query> optional= queryRepository.findById(updatedQuery.getQueryId());
     	Query tempQuery= optional.get();
     	tempQuery.setQuestion(updatedQuery.getQuestion());

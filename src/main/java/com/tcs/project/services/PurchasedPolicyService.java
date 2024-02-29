@@ -69,13 +69,6 @@ public class PurchasedPolicyService {
 		Optional<PurchasedPolicies> optional = purchasedpolicyrepository.findById(purchasedPolicy.getProductId());
 		PurchasedPolicies tempPolicy = optional.get();
 
-//    	tempPolicy.setCoverageDescription(purchasedPolicy.getCoverageDescription());
-//    	tempPolicy.setCoverageAmount(purchasedPolicy.getCoverageAmount());
-//    	tempPolicy.setProductCode(purchasedPolicy.getProductCode());
-//    	tempPolicy.setTenure(purchasedPolicy.getTenure());
-//    	tempPolicy.setProductName(purchasedPolicy.getProductName());
-//    	tempPolicy.setProductPremium(purchasedPolicy.getProductPremium());
-//    	tempPolicy.setProductTier(purchasedPolicy.getProductTier());
 		tempPolicy.setNominee(purchasedPolicy.getNominee());
 		tempPolicy.setEffectiveDate(purchasedPolicy.getEffectiveDate());
 		tempPolicy.setExpiryDate(purchasedPolicy.getExpiryDate());
@@ -111,7 +104,6 @@ public class PurchasedPolicyService {
 
 			policyDetails.add(details);
 		}
-		
 		
 		return policyDetails;
 	}

@@ -11,6 +11,6 @@ import com.tcs.project.resource.PolicyProduct;
 @Repository
 public interface ClaimsRepository extends JpaRepository<Claims, Integer> {
 	public Claims findByPolicyId(int policyId); 
-	public List<Claims>  findByCustomerId(int customerId);
+	public List<Claims> findAllByCustomerId(int customerId);
 
 }

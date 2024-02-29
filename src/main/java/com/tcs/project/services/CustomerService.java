@@ -60,8 +60,7 @@ public class CustomerService {
         "\nCustomer Address: "+customer.getAddress()
         +"\n\n\nBest regards,\nMoon Insurance");
         
-        System.out.println(customer);
-        
+               
         mailSender.send(message);
         return true;
 		
@@ -86,33 +85,6 @@ public class CustomerService {
     	customerrepository.deleteById(id);
     	return true;
     }
-//    public ArrayList<Object[]> allCustomerPurchasedPolicies(Customer customer) {
-//    	
-//    			ArrayList<Object[]> policyDetails = new ArrayList<>();
-//    			ArrayList<PurchasedPolicies> purchasedpolicies= (ArrayList<PurchasedPolicies>) purchasedpolicyrepository.findAll();
-//    	
-//    			for (PurchasedPolicies policy : purchasedpolicies) {
-//    				if(policy.getCustomerId()==customer.getCustomerid())
-//    				{     Object[] details = new Object[7];
-//	    					details[0] = policy.getPolicyNo();
-//	    					details[5] = policy.getEffectiveDate();
-//	    					details[6] = policy.getExpiryDate();
-//	    					details[7] = policy.getNominee();
-//	    	
-//	    				
-//	    					details[1] = customer.getCustomerid();
-//	    					details[2] = customer.getName();
-//	    	
-//	    					PolicyProduct product = policyproductrepository.findById(policy.getProductId()).orElse(null);
-//	    					details[3] = product.getProductTier();
-//	    					details[4] = product.getCoverageAmount();
-//	    	
-//	    				policyDetails.add(details);
-//	    				
-//    				}
-//    			   }
-//    			return policyDetails;
-//    		}
     public String Login(LoginDto logindto) {
     	Optional<Customer> customer=customerrepository.findOneByEmailAndPassword(logindto.getEmail(), logindto.getPassword());
     	if (customer.isPresent()) {

@@ -42,6 +42,10 @@ public class ClaimsService {
 		ArrayList<Claims> claims = (ArrayList<Claims>) claimsrepository.findAll();
 		return claims;
 	}
+	public ArrayList<Claims> allCustomerClaims(int cid) {
+		ArrayList<Claims> claims = (ArrayList<Claims>) claimsrepository.findAllByCustomerId(cid);
+		return claims;
+	}
 	
 	public Claims getClaimById(Integer id) {
 		Optional<Claims> claim = claimsrepository.findById(id);
@@ -73,13 +77,9 @@ public class ClaimsService {
 	}
     
     public boolean adminvalidation(int policyId){
-    	//String pid = pno.substring(7); // Extracting last 3 digits
-        //int policyId = Integer.parseInt(pid); // Converting to integer to remove leading zeros
-        //System.out.println(policyId);
         
         Claims claimRecord=claimsrepository.findByPolicyId(policyId);
-        
-        
+               
         System.out.println(claimRecord);
         PolicyProduct product= policyproductrepository.getById(claimRecord.getProductId());
         System.out.println(product);
@@ -88,58 +88,58 @@ public class ClaimsService {
         	HealthInsurance hi = healthinsurancerepository.getById(policyId);
         	
         	if(hi.getAge()>18 && hi.getAge()<60) {
-        		System.out.println(hi.getAge());
         		if(product.getCoverageDescription().contains(claimRecord.getCauseOfLoss())) {
-        			System.out.println(product.getCoverageDescription());
         			if(claimRecord.getClaimAmount()<= hi.getCoverageBalance()) {
-        				System.out.println(claimRecord.getClaimAmount());
         				if(claimRecord.getClaimAmount()<= product.getCoverageAmount()) {
-        					System.out.println(claimRecord.getClaimAmount());
+        		
         					claimRecord.setStatus("APPROVED");
         					claimsrepository.save(claimRecord);
+        					hi.setCoverageBalance(hi.getCoverageBalance()-claimRecord.getClaimAmount());
+        					healthinsurancerepository.save(hi);
         					return true;
         				}
         			}
         		}
         	}
-        	
         }
         else if(product.getProductName().equals("Auto")) {
         VehicleInsurance hi = vehicleinsurancerepository.getById(policyId);
         
         LocalDate localDate = hi.getFcDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        System.out.println(localDate);
-        // Get the current date
+        
         LocalDate currentDate = LocalDate.now();
         	if(localDate.isAfter(currentDate)) {
-        		System.out.println(localDate.isAfter(currentDate));
+        		
         		if(product.getCoverageDescription().contains(claimRecord.getCauseOfLoss())) {
-        			System.out.println(product.getCoverageDescription());
+        		
         			if(claimRecord.getClaimAmount()<= hi.getCoverageBalance()) {
-        				System.out.println(claimRecord.getClaimAmount());
+        		
         				if(claimRecord.getClaimAmount()<= product.getCoverageAmount()) {
         					claimRecord.setStatus("APPROVED");
         					claimsrepository.save(claimRecord);
+        					hi.setCoverageBalance(hi.getCoverageBalance()-claimRecord.getClaimAmount());
+        					vehicleinsurancerepository.save(hi);
         					return true;
         				}
         			}
         		}
         	}
-        	
         }
         else if(product.getProductName().equals("Home")) {
             HomeInsurance hi = homeinsurancerepository.getById(policyId);
             
-            System.out.println(hi);
+            
             	if(hi.getAssetValue()>10000) {
-            		System.out.println(hi.getAssetValue());
+            
             		if(product.getCoverageDescription().contains(claimRecord.getCauseOfLoss())) {
-            			System.out.println(product.getCoverageDescription() + " " + claimRecord.getCauseOfLoss());
+            
             			if(claimRecord.getClaimAmount()<= hi.getCoverageBalance()) {
-            				System.out.println(claimRecord.getClaimAmount() + " " + hi.getCoverageBalance() + " " + product.getCoverageAmount());
+            
             				if(claimRecord.getClaimAmount()<= product.getCoverageAmount()) {
             					claimRecord.setStatus("APPROVED");
             					claimsrepository.save(claimRecord);
+            					hi.setCoverageBalance(hi.getCoverageBalance()-claimRecord.getClaimAmount());
+            					homeinsurancerepository.save(hi);
             					
             					return true;
             				}

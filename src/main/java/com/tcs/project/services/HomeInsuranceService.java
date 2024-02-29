@@ -38,7 +38,6 @@ public class HomeInsuranceService {
         return homeInsuranceRepository.findById(id);
     }
     public boolean createHomeInsurance(HomeDto homedto) {
-        //return homeInsuranceRepository.save(homeInsurance);
     	
     	SimpleMailMessage message = new SimpleMailMessage();
     	HomeInsurance homeinsurance = new HomeInsurance();
@@ -57,8 +56,7 @@ public class HomeInsuranceService {
     	LocalDate enddate = currentDate.plusYears(pp.getTenure());
     	homeinsurance.setEffectiveDate(Date.valueOf(currentDate));
     	homeinsurance.setExpiryDate(Date.valueOf(enddate));
-    	
-    	
+    	    	
     	HomeInsurance purchasedPolicy=(HomeInsurance) homeInsuranceRepository.save(homeinsurance);
         Customer customer=customerrepository.getById(homeinsurance.getCustomerId());
         PolicyProduct policy=policyproductrepository.getById(homeinsurance.getProductId());
@@ -97,11 +95,7 @@ public class HomeInsuranceService {
 
     public List<PolicyProduct> allHomePolicies() {
 
-		//ArrayList<Object[]> policyDetails = new ArrayList<>();
 		List<PolicyProduct> purchasedpolicies = policyproductrepository.findByProductName("Home");
-
-		
-		
 		
 		for (PolicyProduct policy : purchasedpolicies) {
 			System.out.println(policy);
