@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin("http://localhost:4200")
 @RequestMapping("/queries")
 public class QueryResource {
 
@@ -19,8 +20,8 @@ public class QueryResource {
     private QueryService queryService;
 
     @PostMapping("/add")
-    public ResponseEntity<Query> createQuery(@RequestBody Query query) {
-        Query createdQuery = queryService.createQuery(query);
+    public ResponseEntity<Boolean> createQuery(@RequestBody Query query) {
+        boolean createdQuery = queryService.createQuery(query);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdQuery);
     }
 
@@ -49,9 +50,9 @@ public class QueryResource {
     }
 
     @PostMapping("/{id}/admin-answer")
-    public ResponseEntity<Void> adminAnswer(@PathVariable int id, @RequestBody String answer) {
-        queryService.adminAnswer(id, answer);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Boolean> adminAnswer(@PathVariable int id, @RequestBody String answer) {
+        boolean status =queryService.adminAnswer(id, answer);
+        return ResponseEntity.status(HttpStatus.CREATED).body(status);
     }
 }
 

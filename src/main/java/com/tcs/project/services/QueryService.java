@@ -25,8 +25,9 @@ public class QueryService {
     @Autowired
     private JavaMailSender mailSender;
 
-    public Query createQuery(Query query) {
-        return queryRepository.save(query);
+    public boolean createQuery(Query query) {
+        queryRepository.save(query);
+        return true;
     }
 
     public List<Query> getAllQueries() {
@@ -49,7 +50,7 @@ public class QueryService {
         queryRepository.deleteById(id);
     }
 
-    public void adminAnswer(int id, String answer) {
+    public boolean adminAnswer(int id, String answer) {
         Optional<Query> queryOptional = queryRepository.findById(id);
         if (queryOptional.isPresent()) {
             Query query = queryOptional.get();
@@ -69,11 +70,13 @@ public class QueryService {
             		+"\n\n\n\n\nBest regards,\nMoon Insurance");
             
             mailSender.send(message);
+            return true;
             
         } else {
         	Query query = queryOptional.get();
             query.setAnswer("");
             queryRepository.save(query);
+            return false;
         }
     }
 }
